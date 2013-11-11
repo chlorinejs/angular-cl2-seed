@@ -1,47 +1,46 @@
 (load-file "../node_modules/angular-cl2/src/angular.cl2")
 
-(defapp myApp [])
+(defapp my-app [])
 
 ;; don't have to specify app name as compiler remember the last app name
 ;; defined in `defapp`
 (defroute
-  "/default" ['myCtrl "partials/default.html" ]
-  "/view-2"  {:controller 'emptyCtrl
+  "/default" ['my-ctrl "partials/default.html" ]
+  "/view-2"  {:controller 'empty-ctrl
               :template
               (hiccup
                [:h2
                 "Hiccup rocks!"])}
   :default "/default")
 
-(defdirective myDirective
+(defdirective my-directive
   []
   ;; can be a directive-definition object or a link function
   (fn [scope elm attrs]
-    (.
-     scope
-     ($watch
-      (. attrs -myDirective)
-      (fn [value] (. elm (text (+ value 4))))))))
+    (scope.$watch
+     (:my-directive attrs)
+     (fn [value] (. elm (text (+ value 4)))))))
 
-(defcontroller myCtrl
-  [$scope myService]
-  (def$ someNumber 12)
-  (defn$ addTwo [n] {:result (+ n 2)})
-  (defn$ serviceAdd [n]
-    (myService.addThree n)))
+(defcontroller my-ctrl
+  [$scope my-service]
+  (def$ some-number 12)
+  (defn$ add-two [n] {:result (+ n 2)})
+  (defn$ service-add [n]
+    (my-service.add-three n)))
 
-(defcontroller emptyCtrl
+(defcontroller empty-ctrl
   [$scope])
 
 ;; example of specifying app name
-(defservice myApp myService
+(defservice my-app my-service
  []
- (defn! addThree [n] (+ n 3)))
+ (this->!)
+ (defn! add-three [n] (+ n 3)))
 
 ;; generic defmodule usage
-(defmodule myApp
-  (:filter (myFilter [] [s] (+ s 5))))
+(defmodule my-app
+  (:filter (my-filter [] [s] (+ s 5))))
 
-(deffilter yourFilter []
+(deffilter your-filter []
   [s]
   (+ s 6))
